@@ -4,7 +4,7 @@
 //bulb control + simulation
 
 //scale to window
-int scale=40;
+int scale=35;
 
 //bulb grid size
 int gridX=12;

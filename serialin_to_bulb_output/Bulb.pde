@@ -68,7 +68,7 @@ class Bulb {
     int D = 2*dx - dy;
     int x = x0;
 
-    for (int y = y0; y< y1; y++) {
+    for (int y = y0; y<= y1; y++) {
       plot(x, y);
       if (D > 0) {
         x = x + xi;
