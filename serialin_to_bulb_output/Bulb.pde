@@ -86,7 +86,7 @@ class Bulb {
   void drawLine() {
     int x0=bulbId%(gridX-1);
     int y0=bulbId/(gridX-1);
-    println(bulbId+":"+x0+","+y0);
+    //println(bulbId+":"+x0+","+y0);
 
     int x1=lastbulbId%(gridX-1);
     int y1=lastbulbId/(gridX-1);
