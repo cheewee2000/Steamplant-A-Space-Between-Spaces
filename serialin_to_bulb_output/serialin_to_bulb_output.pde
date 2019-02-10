@@ -7,8 +7,17 @@
 int scale=40;
 
 //bulb grid size
-int gridX=11;
-int gridY=20;
+int gridX=12;
+int gridY=21;
+
+//muondetectorgrid;
+int mGrid=6;
+
+PVector lastPos;
+
+//last grid position
+int lastbulbId=0;
+//int y1=18;
 
 import processing.serial.*;
 Serial myPort;
@@ -39,13 +48,15 @@ void settings() {
 
   //link id to position on grid
   int count=0;
-  for (int i=1; i<gridX; i++) {
-    for (int j=1; j<gridY; j++) {
-      bulbs[count].x=i*scale;
-      bulbs[count].y=j*scale;
+  for (int i=1; i<gridY; i++) {
+    for (int j=1; j<gridX; j++) {
+      bulbs[count].xpos=j*scale;
+      bulbs[count].ypos=i*scale;
       count++;
     }
   }
+
+  lastPos = new PVector(width/2, height/2);
 }
 
 
@@ -82,53 +93,13 @@ void drawGrid() {
   for (int i=0; i<gridY; i++) {
     line(0, i*scale, width, i*scale);
   }
-}
+  stroke(105);
 
-
-class Bulb {
-  int x;
-  int y;
-  int bulbId;
-  String url;
-  boolean on;
-
-  Bulb(int _x, int _y, int _id, String _url) {
-    x=_x;
-    y=_y;
-    bulbId=_id;
-    url=_url;
+  int margin=25;
+  for (int i=0; i<mGrid+1; i++) {
+    line(margin+i*(width-margin*2)/(mGrid), 0, margin+i*(width-margin*2)/(mGrid), height);
   }
-
-  //draw ellipse and load url 
-  void draw() {
-    ellipseMode(CENTER);
-    noStroke();
-    if (on) {
-      fill(255);
-      loadURL();
-      on=false;
-    } else {
-      fill(50);
-    }
-    ellipse(x, y, scale/2, scale/2);
-    pingNeighbor();
-  }
-
-  //scatter bulb effect
-  void pingNeighbor() {
-  }
-
-  //load url
-  void loadURL() {
-    println(bulbId);
-    //img= loadImage(url);
-  }
-
-  //allow mousepress to debug and interact with bulb grid
-  void update() {
-    if (mousePressed) {
-      if (mouseX>x-scale/2 && mouseX<x+scale/2 && mouseY>y-scale/2 && mouseY<y+scale/2) 
-        on=true;
-    }
+  for (int i=0; i<mGrid+1; i++) {
+    line(0, margin+i*(height-margin*2)/(mGrid), width, margin+i*(height-margin*2)/(mGrid));
   }
 }
