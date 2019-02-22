@@ -122,6 +122,7 @@ class Bulb {
       if (mouseX>xpos-scale/2 && mouseX<xpos+scale/2 && mouseY>ypos-scale/2 && mouseY<ypos+scale/2) 
         //on=true;
         drawLine();
+        //println("drawline");
     }
   }
 }
