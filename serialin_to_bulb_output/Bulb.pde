@@ -31,8 +31,9 @@ class Bulb {
 
     ellipse(xpos, ypos, 10, 10);
 
-    stroke(0);
-    text(bulbId, xpos+5, ypos);
+    //stroke(0);
+    fill(240);
+    text(bulbId, xpos+8, ypos-3);
   }
 
 

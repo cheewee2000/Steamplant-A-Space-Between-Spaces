@@ -1,7 +1,7 @@
 
 class Repeller {
   PVector location;
-  float r = 10;
+  float r = 100;
   int life=200;
   Repeller(float x, float y) {
     location = new PVector(x, y);
@@ -9,7 +9,7 @@ class Repeller {
 
   void display() {
     stroke(255);
-    fill(255);
+    fill(255,0,0);
     ellipse(location.x, location.y, r/2, r/2);
     life--;
   }

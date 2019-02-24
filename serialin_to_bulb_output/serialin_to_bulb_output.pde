@@ -20,7 +20,8 @@ int gridX=11;
 int gridY=19;
 
 //muondetectorgrid;
-int mGrid=6;
+int mGridX=5;
+int mGridY=6;
 
 PVector lastPos;
 
@@ -44,8 +45,8 @@ void settings() {
 
   //serial
   println(Serial.list());
-  //myPort = new Serial(this, Serial.list()[4], 500000);
-  //myPort.bufferUntil('\n');
+  myPort = new Serial(this, Serial.list()[4], 115200);
+  myPort.bufferUntil('\n');
 
   //load csv
   table = loadTable("esps1.csv", "header");
@@ -61,7 +62,7 @@ void settings() {
   }
 
   //link id to position on grid
-  int count=0;
+  int count=1;
   int yCount=0;
   for (int i=1; i<gridY; i++) {
     yCount++;
@@ -123,10 +124,13 @@ void serialEvent(Serial myPort) {
     // thing.  Put the numbers in the color variables:
     if (coordinates.length >= 2) {
       // map them to the range 0-255:
-      int cell= returnCell(coordinates[0], coordinates[1]);
-      //println("Coordinate = " + coordinates[0] + "," + coordinates[1] + " Cell = " + cell);
+      //int cell= returnCell(coordinates[0], coordinates[1]);
+      println("Coordinate = " + coordinates[0] + "," + coordinates[1] );
       //println(cell);
-      bulbs[constrain(cell*6+int(random(-6, 0)), 0, 226)].drawLine();
+      //bulbs[constrain(cell*6+int(random(-6, 0)), 0, 226)].drawLine();
+      repeller.location.x=width/coordinates[0];
+      repeller.location.y=height/coordinates[1];
+      repeller.life=200;
     }
   }
 }
@@ -143,17 +147,24 @@ void drawGrid() {
   for (int i=0; i<gridY; i++) {
     line(0, i*scaleY, width, i*scaleY);
   }
-  //stroke(105);
 
-  //int margin=0;
-  //for (int i=0; i<mGrid+1; i++) {
-  //  line(margin+i*(width-margin*2)/(mGrid), 0, margin+i*(width-margin*2)/(mGrid), height);
-  //}
-  //for (int i=0; i<mGrid+1; i++) {
-  //  line(0, margin+i*(height-margin*2)/(mGrid), width, margin+i*(height-margin*2)/(mGrid));
-  //}
+  stroke(255);
+  noFill();
+
+  int marginX=31;
+  int marginY=25;
+
+  for (int i=0; i<mGridY; i++) {
+    for (int j=0; j<mGridX; j++) {
+      int rectX=marginX+j*(width-marginX*2)/(mGridX);
+      int rectY=marginY+i*(height-marginY*2)/(mGridY);
+      int w= (width-marginX*2)/mGridX;
+      int h= (height-marginY*2)/mGridY;
+
+      rect(rectX, rectY, w, (height-marginY*2)/mGridY);
+    }
+  }
 }
-
 
 void mousePressed() {
   //flock.addBoid(new Boid(mouseX,mouseY));
@@ -164,36 +175,4 @@ void mousePressed() {
   repeller.location.x=mouseX;
   repeller.location.y=mouseY;
   repeller.life=200;
-}
-
-int returnBulb(int c) {
-  int bulb=0;
-  switch (c) {
-  case 0:
-    bulb=pickOne(0, 1, 19, 18, 20, 21);
-    break;
-  case 1:
-    bulb=pickOne(2, 3, 17, 16, 22, 23);
-    break;
-  }
-
-
-  return bulb;
-}
-
-int pickOne( int a, int b, int c, int d, int e, int f) {
-
-
-  int [] cluster= {a, b, c, d, e, f};
-
-  return cluster[int( random(0, 6)) ];
-}
-
-
-
-int returnCell(int x, int y) {
-  int sensorX=5;
-  int sensorY=6;
-  int cell=x+sensorX*y;
-  return cell;
 }
