@@ -5,15 +5,19 @@
 
 //try
 //flocking with hits makes flock go away
+Flock flock;
+Repeller repeller;
 
 
 //scale to window
 
-int scale=35;
+int scaleX=60;
+int scaleY=40;
+
 
 //bulb grid size
-int gridX=12;
-int gridY=21;
+int gridX=11;
+int gridY=19;
 
 //muondetectorgrid;
 int mGrid=6;
@@ -36,7 +40,7 @@ Bulb[] bulbs= new Bulb[226];
 PImage img;
 
 void settings() {
-  size(scale*gridX, scale*gridY); //scale*gridSize
+  size(scaleX*gridX, scaleY*gridY); //scale*gridSize
 
   //serial
   //println(Serial.list());
@@ -60,8 +64,8 @@ void settings() {
   int count=0;
   for (int i=1; i<gridY; i++) {
     for (int j=1; j<gridX; j++) {
-      bulbs[count].xpos=j*scale;
-      bulbs[count].ypos=i*scale;
+      bulbs[count].xpos=j*scaleX;
+      bulbs[count].ypos=i*scaleY;
       count++;
     }
   }
@@ -71,10 +75,18 @@ void settings() {
 
 
 void setup() {
+    flock = new Flock();
+  // Add an initial set of boids into the system
+  for (int i = 0; i < 4; i++) {
+    flock.addBoid(new Boid(60, 60));
+  }
+  repeller = new Repeller(width/3, height/3);
+  //frameRate(28);
+  
 }
 
 void draw() {
-  background(20);
+  background(180);
 
   //draw background grid
   drawGrid();
@@ -84,6 +96,12 @@ void draw() {
     bulbs[i].update();
     bulbs[i].draw();
   }
+  
+  flock.run();
+  flock.applyRepeller(repeller);
+  repeller.display();
+  
+
 }
 
 
@@ -117,21 +135,35 @@ void serialEvent(Serial myPort) {
 void drawGrid() {
   stroke(55);
   for (int i=0; i<gridX; i++) {
-    line(i*scale, 0, i*scale, height);
+    //line(i*scaleX, 0, i*scaleX, height);
   }
   for (int i=0; i<gridY; i++) {
-    line(0, i*scale, width, i*scale);
+    line(0, i*scaleY, width, i*scaleY);
   }
-  stroke(105);
+  //stroke(105);
 
-  int margin=25;
-  for (int i=0; i<mGrid+1; i++) {
-    line(margin+i*(width-margin*2)/(mGrid), 0, margin+i*(width-margin*2)/(mGrid), height);
-  }
-  for (int i=0; i<mGrid+1; i++) {
-    line(0, margin+i*(height-margin*2)/(mGrid), width, margin+i*(height-margin*2)/(mGrid));
-  }
+  //int margin=0;
+  //for (int i=0; i<mGrid+1; i++) {
+  //  line(margin+i*(width-margin*2)/(mGrid), 0, margin+i*(width-margin*2)/(mGrid), height);
+  //}
+  //for (int i=0; i<mGrid+1; i++) {
+  //  line(0, margin+i*(height-margin*2)/(mGrid), width, margin+i*(height-margin*2)/(mGrid));
+  //}
 }
+
+
+void mousePressed() {
+  //flock.addBoid(new Boid(mouseX,mouseY));
+  //for (int i = 0; i < 20; i++) {
+  //  flock.addBoid(new Boid(mouseX*gridSize/scale, mouseY*gridSize/scale));
+  //}
+
+  repeller.location.x=mouseX;
+  repeller.location.y=mouseY;
+  repeller.life=200;
+}
+
+
 
 int returnCell(int x, int y) {
   int cell=0;

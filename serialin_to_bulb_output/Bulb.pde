@@ -19,19 +19,19 @@ class Bulb {
     
     if (on) {
       on=false;
-      fadeCount=255;
+      fadeCount=0;
       loadURL();
       //stroke(255);
       //line(lastPos.x, lastPos.y, x, y);
     } 
     
     else {
-      fadeCount-=2;
-      if(fadeCount<50)fadeCount=50;
+      fadeCount+=2;
+      if(fadeCount>255)fadeCount=255;
       fill(fadeCount);
     }
     
-    ellipse(xpos, ypos, scale/2, scale/2);
+    ellipse(xpos, ypos, 10, 10);
   }
 
 
@@ -119,7 +119,7 @@ class Bulb {
   //allow mousepress to debug and interact with bulb grid
   void update() {
     if (mousePressed) {
-      if (mouseX>xpos-scale/2 && mouseX<xpos+scale/2 && mouseY>ypos-scale/2 && mouseY<ypos+scale/2) 
+      if (mouseX>xpos-scaleX/2 && mouseX<xpos+scaleX/2 && mouseY>ypos-scaleY/2 && mouseY<ypos+scaleY/2) 
         //on=true;
         drawLine();
         //println("drawline");
