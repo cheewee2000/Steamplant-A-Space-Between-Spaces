@@ -128,8 +128,8 @@ void serialEvent(Serial myPort) {
       println("Coordinate = " + coordinates[0] + "," + coordinates[1] );
       //println(cell);
       //bulbs[constrain(cell*6+int(random(-6, 0)), 0, 226)].drawLine();
-      repeller.location.x=width/coordinates[0];
-      repeller.location.y=height/coordinates[1];
+      repeller.location.x=width/mGridX*coordinates[0]+random(width/mGridX);
+      repeller.location.y=height/mGridY*coordinates[1]+random(width/mGridY);
       repeller.life=200;
     }
   }
