@@ -15,12 +15,15 @@ class Boid {
     acceleration = new PVector(0, 0);
 
     // Leaving the code temporarily this way so that this example runs in JS
+    
+    //float angle = 180;
+    
     float angle = random(TWO_PI);
     velocity = new PVector(cos(angle), sin(angle));
 
     position = new PVector(x, y);
     r = 20.0;
-    maxspeed = 5;
+    maxspeed = 1;
     maxforce = 0.03;
     life=255;
   }
@@ -84,10 +87,10 @@ class Boid {
   void render() {
     // Draw a triangle rotated in the direction of velocity
     //float theta = velocity.heading() + radians(90);
-    fill(100);
-    ellipse((position.x/gridSize)*scale, (position.y/gridSize)*scale, scale/10, scale/10);
+    fill(150);
+    //ellipse((position.x/gridSize)*scale, (position.y/gridSize)*scale, scale/10, scale/10);
 
-    fill(255);
+    fill(0);
     int x = int(position.x/gridSize)*scale;
     int y = int(position.y/gridSize)*scale;
 
