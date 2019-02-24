@@ -32,16 +32,17 @@ void settings() {
 void setup() {
   flock = new Flock();
   // Add an initial set of boids into the system
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 3; i++) {
     flock.addBoid(new Boid(width/2, height/2));
   }
-  repeller = new Repeller(width/2, height/2);
+  repeller = new Repeller(width/3, height/3);
+  //frameRate(28);
 }
 
 void draw() {
 
 
-  background(20);
+  background(180);
   drawGrid();
   flock.run();
   flock.applyRepeller(repeller);
@@ -70,7 +71,7 @@ void drawGrid() {
 
       ellipseMode(CENTER);
       noStroke();
-      fill(50);
+      fill(255);
       ellipse(i*scale, j*scale, scale/2, scale/2);
     }
   }
@@ -157,10 +158,13 @@ class Repeller {
   void display() {
     stroke(255);
     fill(255);
-    ellipse(location.x, location.y, r, r);
+    ellipse(location.x, location.y, r/2, r/2);
     life--;
   }
 
+
+  long currentTime;
+  long prevTime;
 
   PVector repel(Boid b) {
     PVector scaledLocation =PVector.mult(location, gridSize);
@@ -176,7 +180,25 @@ class Repeller {
     dir.normalize();
     d = constrain(d, 5, 100);
     float strength=400;
-    float force = -1 * strength / (d * d);
+    float force = 1;
+    
+    currentTime = millis();
+
+    if (currentTime - prevTime > 15000) {
+      prevTime = currentTime;
+
+      repeller.location.x=mouseX;
+      repeller.location.y=mouseY;
+
+      //repeller.location.x=random(width);
+      //repeller.location.y=random(height);
+      repeller.life=100;
+    }
+
+    if (keyPressed == true) {
+      force = -2 * strength / (d * d);
+      prevTime = currentTime += 10000;
+    } 
     dir.mult(force);
     return dir;
   }
