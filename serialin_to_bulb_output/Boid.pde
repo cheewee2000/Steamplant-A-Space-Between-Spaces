@@ -90,7 +90,7 @@ class Boid {
   void render() {
 
     fill(0);
-       ellipse((position.x/gridX)*scaleX, (position.y/gridY)*scaleY, 3, 3);
+    //ellipse((position.x/gridX)*scaleX, (position.y/gridY)*scaleY, 3, 3);
 
 
     int x = int(position.x/gridX)*scaleX;
@@ -102,14 +102,15 @@ class Boid {
 
     popMatrix();
 
+    int yBulbPos=int(position.y/gridY-1);
+    int xBulbPos=int( position.x/(gridX-1));
+    int cell;
 
-    int cell = int( position.x/(gridX-1)) + (gridX-1)*int(position.y/(gridY-1)) ;
-    
+    if (yBulbPos%2==0) cell =  xBulbPos + (gridX-1)*yBulbPos ;
+    else cell =  (gridX-1)-xBulbPos + (gridX-1)*yBulbPos ;
+
+
     bulbs[cell].on=true;
-
-
-
-    //life--;
   }
 
   // Wraparound

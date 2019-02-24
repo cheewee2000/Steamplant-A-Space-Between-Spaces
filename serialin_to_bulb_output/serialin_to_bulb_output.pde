@@ -43,7 +43,7 @@ void settings() {
   size(scaleX*gridX, scaleY*gridY); //scale*gridSize
 
   //serial
-  //println(Serial.list());
+  println(Serial.list());
   //myPort = new Serial(this, Serial.list()[4], 500000);
   //myPort.bufferUntil('\n');
 
@@ -62,10 +62,17 @@ void settings() {
 
   //link id to position on grid
   int count=0;
+  int yCount=0;
   for (int i=1; i<gridY; i++) {
+    yCount++;
     for (int j=1; j<gridX; j++) {
-      bulbs[count].xpos=j*scaleX;
-      bulbs[count].ypos=i*scaleY;
+      if (yCount%2==1) {
+        bulbs[count].xpos=j*scaleX;
+        bulbs[count].ypos=i*scaleY;
+      } else {
+        bulbs[count].xpos=width-j*scaleX;
+        bulbs[count].ypos=i*scaleY;
+      }
       count++;
     }
   }
@@ -75,14 +82,13 @@ void settings() {
 
 
 void setup() {
-    flock = new Flock();
+  flock = new Flock();
   // Add an initial set of boids into the system
   for (int i = 0; i < 4; i++) {
     flock.addBoid(new Boid(60, 60));
   }
   repeller = new Repeller(width/3, height/3);
   //frameRate(28);
-  
 }
 
 void draw() {
@@ -96,12 +102,10 @@ void draw() {
     bulbs[i].update();
     bulbs[i].draw();
   }
-  
+
   flock.run();
   flock.applyRepeller(repeller);
   repeller.display();
-  
-
 }
 
 
@@ -122,8 +126,7 @@ void serialEvent(Serial myPort) {
       int cell= returnCell(coordinates[0], coordinates[1]);
       //println("Coordinate = " + coordinates[0] + "," + coordinates[1] + " Cell = " + cell);
       //println(cell);
-      bulbs[constrain(cell*6+int(random(-6,0)),0,226)].drawLine();
-  
+      bulbs[constrain(cell*6+int(random(-6, 0)), 0, 226)].drawLine();
     }
   }
 }
@@ -163,126 +166,34 @@ void mousePressed() {
   repeller.life=200;
 }
 
+int returnBulb(int c) {
+  int bulb=0;
+  switch (c) {
+  case 0:
+    bulb=pickOne(0, 1, 19, 18, 20, 21);
+    break;
+  case 1:
+    bulb=pickOne(2, 3, 17, 16, 22, 23);
+    break;
+  }
+
+
+  return bulb;
+}
+
+int pickOne( int a, int b, int c, int d, int e, int f) {
+
+
+  int [] cluster= {a, b, c, d, e, f};
+
+  return cluster[int( random(0, 6)) ];
+}
+
 
 
 int returnCell(int x, int y) {
-  int cell=0;
-
-  //coordinate the cell numbers
-  if (x == 1 && y == 1) {
-    cell = 0;
-  }
-  if (x==2 && y == 1) {
-    cell =1;
-  }
-  if (x==3 && y == 1) {
-    cell=2;
-  }
-  if (x==4 && y == 1) {
-    cell=3;
-  }
-  if (x==5 && y == 1) {
-    cell=4;
-  }
-  if (x==6 && y == 1) {
-    cell=5;
-  }
-
-  if (x == 1 && y == 2) {
-    cell = 6;
-  }
-  if (x==2 && y == 2) {
-    cell =7;
-  }
-  if (x==3 && y == 2) {
-    cell=8;
-  }
-  if (x==4 && y == 2) {
-    cell=9;
-  }
-  if (x==5 && y == 2) {
-    cell=10;
-  }
-  if (x==6 && y == 2) {
-    cell=11;
-  }
-
-
-  if (x == 1 && y == 3) {
-    cell = 12;
-  }
-  if (x==2 && y == 3) {
-    cell =13;
-  }
-  if (x==3 && y == 3) {
-    cell=14;
-  }
-  if (x==4 && y == 3) {
-    cell=15;
-  }
-  if (x==5 && y == 3) {
-    cell=16;
-  }
-  if (x==6 && y == 3) {
-    cell=17;
-  }
-
-
-  if (x == 1 && y == 4) {
-    cell = 18;
-  }
-  if (x==2 && y == 4) {
-    cell =19;
-  }
-  if (x==3 && y == 4) {
-    cell=20;
-  }
-  if (x==4 && y == 4) {
-    cell=21;
-  }
-  if (x==5 && y == 4) {
-    cell=22;
-  }
-  if (x==6 && y == 4) {
-    cell=23;
-  }
-
-  if (x == 1 && y == 5) {
-    cell = 24;
-  }
-  if (x==2 && y == 5) {
-    cell =25;
-  }
-  if (x==3 && y == 5) {
-    cell=26;
-  }
-  if (x==4 && y == 5) {
-    cell=27;
-  }
-  if (x==5 && y == 5) {
-    cell=28;
-  }
-  if (x==6 && y == 5) {
-    cell=29;
-  }
-
-  if (x == 1 && y == 6) {
-    cell = 30;
-  }
-  if (x==2 && y == 6) {
-    cell =31;
-  }
-  if (x==3 && y == 6) {
-    cell=32;
-  }
-  if (x==4 && y == 6) {
-    cell=33;
-  }
-  if (x==5 && y == 6) {
-    cell=34;
-  }
-  if (x==6 && y == 6) {
-    cell=35;
-  }
+  int sensorX=5;
+  int sensorY=6;
+  int cell=x+sensorX*y;
   return cell;
 }

@@ -16,22 +16,23 @@ class Bulb {
   void draw() {
     ellipseMode(CENTER);
     noStroke();
-    
+
     if (on) {
       on=false;
       fadeCount=0;
       loadURL();
       //stroke(255);
       //line(lastPos.x, lastPos.y, x, y);
-    } 
-    
-    else {
+    } else {
       fadeCount+=2;
-      if(fadeCount>255)fadeCount=255;
+      if (fadeCount>255)fadeCount=255;
       fill(fadeCount);
     }
-    
+
     ellipse(xpos, ypos, 10, 10);
+
+    stroke(0);
+    text(bulbId, xpos+5, ypos);
   }
 
 
@@ -79,17 +80,31 @@ class Bulb {
   }
 
   void plot(int x, int y) {
-    int n=int(x+y*(gridX-1));
+    int n;
+
+    if (y%2==0) n=int(x+y*(gridX-1));
+    else n=int((gridX-1)-x+y*(gridX-1));
+
+
     bulbs[n].on=true;
   }
 
   void drawLine() {
-    int x0=bulbId%(gridX-1);
     int y0=bulbId/(gridX-1);
+    int x0;
+    if (y0%2==0)x0=bulbId%(gridX-1);
+    else x0=(gridX-1)-bulbId%(gridX-1);
+
+
     //println(bulbId+":"+x0+","+y0);
 
-    int x1=lastbulbId%(gridX-1);
+    //int x1=lastbulbId%(gridX-1);
     int y1=lastbulbId/(gridX-1);
+
+    int x1;
+    if (y1%2==0)x1=lastbulbId%(gridX-1);
+    else x1=(gridX-1)-lastbulbId%(gridX-1);
+
 
     if (abs(y1 - y0) < abs(x1 - x0)) {
       if (x0 > x1) {
@@ -122,7 +137,7 @@ class Bulb {
       if (mouseX>xpos-scaleX/2 && mouseX<xpos+scaleX/2 && mouseY>ypos-scaleY/2 && mouseY<ypos+scaleY/2) 
         //on=true;
         drawLine();
-        //println("drawline");
+      //println("drawline");
     }
   }
 }
